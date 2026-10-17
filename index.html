@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wangcyberpunk | Cybersecurity and Digital Safety</title>
+<meta name="description" content="Cybersecurity and digital safety experts. Account protection, incident response, blockchain fraud tracing, and security audits.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    color-scheme: dark;
+    --bg-top: #04070a;
+    --bg-bottom: #091018;
+    --cyan: #3fa9ff;
+    --pink: #1fe08a;
+    --green: #1fe08a;
+    --text: #c9d4de;
+    --text-soft: #7f919e;
+    --card: #0b1017;
+    --card-border: #184a63;
+    --line: #182430;
+    --font: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: var(--font);
+    color: var(--text);
+    line-height: 1.7;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(63,169,255,.08), transparent 40%),
+      radial-gradient(circle at 85% 30%, rgba(31,224,138,.08), transparent 45%),
+      linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--cyan); }
+  :focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; border-radius: 6px; }
+
+  .grad {
+    background: linear-gradient(90deg, var(--cyan) 0%, var(--cyan) 35%, var(--pink) 75%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+  }
+
+  .wrap { width: min(72rem, 100% - 2.5rem); margin-inline: auto; }
+
+  /* ---------- Header ---------- */
+  header {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(13,11,38,.82);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(94,240,255,.12);
+  }
+  .bar { display: flex; align-items: center; justify-content: space-between; padding: 1rem 0; }
+
+  .logo { display: flex; align-items: center; gap: .7rem; text-decoration: none; color: #fff; }
+  .logo-mark {
+    width: 2.4rem; height: 2.4rem; border-radius: .7rem;
+    display: grid; place-items: center;
+    background: linear-gradient(135deg, var(--cyan), var(--pink));
+    color: #0d0b26; font-weight: 800; font-size: 1.05rem;
+  }
+  .logo-text { font-weight: 700; font-size: 1.15rem; letter-spacing: .01em; }
+  .logo-text span { color: var(--cyan); }
+
+  .menu-btn {
+    width: 2.8rem; height: 2.8rem; background: transparent; border: 0; cursor: pointer;
+    display: grid; place-content: center; gap: 6px;
+  }
+  .menu-btn i { display: block; width: 1.9rem; height: 3px; background: var(--cyan); border-radius: 2px; transition: transform .2s, opacity .2s; }
+  .menu-btn[aria-expanded="true"] i:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+  .menu-btn[aria-expanded="true"] i:nth-child(2) { opacity: 0; }
+  .menu-btn[aria-expanded="true"] i:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+  nav.main {
+    display: none;
+    flex-direction: column; gap: .25rem;
+    padding: .5rem 0 1.25rem;
+  }
+  nav.main.open { display: flex; }
+  nav.main a {
+    color: var(--text); text-decoration: none; font-weight: 600;
+    padding: .75rem .25rem; border-bottom: 1px solid var(--line);
+  }
+  nav.main a:hover { color: var(--cyan); }
+
+  @media (min-width: 62rem) {
+    .menu-btn { display: none; }
+    nav.main { display: flex !important; flex-direction: row; align-items: center; gap: 1.75rem; padding: 0; }
+    nav.main a { border: 0; padding: .25rem 0; font-size: .95rem; }
+    nav.main a.cta {
+      padding: .65rem 1.2rem; border-radius: 999px;
+      background: linear-gradient(90deg, var(--cyan), var(--pink)); color: #0d0b26;
+    }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero { text-align: center; padding: 3.5rem 0 5rem; }
+  .hero h1 {
+    font-size: clamp(2.2rem, 6.4vw, 4rem);
+    line-height: 1.22; font-weight: 700;
+    margin: 0 auto 1.75rem; max-width: 18ch;
+    animation: rise .8s ease-out both;
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .hero p { font-size: clamp(1.02rem, 2.4vw, 1.25rem); color: var(--text-soft); max-width: 46rem; margin: 0 auto 2.25rem; font-weight: 400; }
+
+  .btns { display: flex; flex-wrap: wrap; justify-content: center; gap: .9rem; }
+  .btn {
+    display: inline-block; font: 700 1rem/1 var(--font);
+    padding: 1rem 1.7rem; border-radius: 999px; text-decoration: none; cursor: pointer;
+    border: 1.5px solid var(--cyan);
+    transition: transform .15s, box-shadow .2s;
+  }
+  .btn-fill { background: linear-gradient(90deg, var(--cyan), var(--pink)); border-color: transparent; color: #0d0b26; }
+  .btn-fill:hover { box-shadow: 0 0 28px rgba(94,240,255,.45); transform: translateY(-1px); }
+  .btn-line { background: transparent; color: var(--cyan); }
+  .btn-line:hover { background: rgba(94,240,255,.1); }
+
+  .trust {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem 1.75rem;
+    margin: 3rem 0 0; padding: 0; list-style: none; color: var(--text-soft); font-size: .92rem; font-weight: 500;
+  }
+  .trust li::before { content: ""; display: inline-block; width: .55rem; height: .55rem; border-radius: 50%; background: var(--green); margin-right: .55rem; box-shadow: 0 0 8px var(--green); }
+
+  /* ---------- Sections ---------- */
+  section { padding: 4.5rem 0; scroll-margin-top: 4.5rem; }
+  .section-head { text-align: center; margin-bottom: 3rem; }
+  .section-head h2 { font-size: clamp(2rem, 5vw, 2.9rem); font-weight: 700; line-height: 1.2; margin: 0 0 .8rem; }
+  .section-head p { color: var(--text-soft); max-width: 40rem; margin: 0 auto; }
+
+  /* ---------- Service cards ---------- */
+  .cards { display: grid; gap: 1.6rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); }
+  .card {
+    scroll-margin-top: 6rem;
+    background: var(--card);
+    border: 1.5px solid var(--card-border);
+    border-radius: 1.8rem;
+    padding: 2rem 1.75rem 2.1rem;
+    box-shadow: 0 0 0 1px rgba(94,240,255,.04), 0 18px 40px rgba(0,0,0,.35);
+  }
+  .icon {
+    width: 4.6rem; height: 4.6rem; border-radius: 1.2rem;
+    display: grid; place-items: center; margin-bottom: 1.4rem;
+    background: rgba(25,230,140,.08);
+    border: 1.5px solid rgba(25,230,140,.35);
+    box-shadow: 0 0 22px rgba(25,230,140,.25), inset 0 0 14px rgba(25,230,140,.12);
+  }
+  .icon svg { width: 2rem; height: 2rem; stroke: var(--green); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 5px rgba(25,230,140,.7)); }
+  .card h3 { font-size: 1.3rem; margin: 0 0 .6rem; color: #fff; font-weight: 700; line-height: 1.3; }
+  .card p { margin: 0; color: var(--text-soft); font-size: .98rem; }
+
+
+  /* ---------- Services dropdown ---------- */
+  .dd { position: relative; }
+  .dd-btn {
+    display: flex; align-items: center; justify-content: space-between; gap: .5rem; width: 100%;
+    background: transparent; border: 0; border-bottom: 1px solid var(--line);
+    color: var(--text); font: 600 1rem/1.7 var(--font); padding: .75rem .25rem; cursor: pointer; text-align: left;
+  }
+  .dd-btn:hover, .dd-btn[aria-expanded="true"] { color: var(--cyan); }
+  .caret { width: .6rem; height: .6rem; border-right: 2.5px solid currentColor; border-bottom: 2.5px solid currentColor; transform: rotate(45deg) translateY(-2px); transition: transform .2s; }
+  .dd-btn[aria-expanded="true"] .caret { transform: rotate(225deg) translateY(-2px); }
+  .dd-list { display: none; list-style: none; margin: 0; padding: .25rem 0 .5rem 1rem; }
+  .dd-list.open { display: block; }
+  nav.main .dd-list a { font-weight: 500; font-size: .95rem; color: var(--text-soft); border: 0; padding: .55rem .25rem; display: block; }
+  nav.main .dd-list a:hover { color: var(--cyan); }
+
+  @media (min-width: 62rem) {
+    .dd-btn { width: auto; border: 0; padding: .25rem 0; font-size: .95rem; }
+    .dd-list {
+      position: absolute; top: calc(100% + .9rem); left: -1rem; min-width: 17rem; z-index: 40;
+      padding: .6rem; border-radius: 1.1rem;
+      background: #15142e; border: 1.5px solid var(--card-border);
+      box-shadow: 0 18px 40px rgba(0,0,0,.5), 0 0 24px rgba(94,240,255,.12);
+    }
+    nav.main .dd-list a { padding: .65rem .9rem; border-radius: .7rem; }
+    nav.main .dd-list a:hover { background: rgba(94,240,255,.08); }
+  }
+
+  /* ---------- About ---------- */
+  .about { display: grid; gap: 2.5rem; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); align-items: start; }
+  .about p { color: var(--text-soft); margin: 0 0 1rem; }
+  .about p strong { color: #fff; }
+  .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; margin: 1.75rem 0 0; padding: 0; list-style: none; }
+  .stats li { border-left: 2px solid var(--cyan); padding-left: 1rem; color: var(--text-soft); font-size: .92rem; }
+  .stats b { display: block; font-size: 1.8rem; line-height: 1.1; color: #fff; }
+
+  /* ---------- Testimonials ---------- */
+  .quotes { display: grid; gap: 1.6rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); margin: 0; }
+  .quote { background: var(--card); border: 1.5px solid var(--card-border); border-radius: 1.8rem; padding: 1.9rem 1.75rem; margin: 0; }
+  .quote p { margin: 0 0 1.25rem; color: var(--text); }
+  .quote footer { border: 0; padding: 0; text-align: left; color: var(--text-soft); font-size: .9rem; }
+  .quote footer b { display: block; color: #fff; font-size: 1rem; }
+
+  /* ---------- Process (a real sequence, so numbered) ---------- */
+  .steps { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); counter-reset: step; padding: 0; margin: 0; list-style: none; }
+  .steps li {
+    counter-increment: step;
+    border-left: 2px solid var(--cyan);
+    padding: .25rem 0 .25rem 1.4rem;
+  }
+  .steps li::before {
+    content: counter(step);
+    display: block; font-size: 2.2rem; font-weight: 800; line-height: 1;
+    background: linear-gradient(90deg, var(--cyan), var(--pink)); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+    margin-bottom: .5rem;
+  }
+  .steps h3 { margin: 0 0 .35rem; color: #fff; font-size: 1.15rem; }
+  .steps p { margin: 0; color: var(--text-soft); font-size: .96rem; }
+
+  /* ---------- Principles ---------- */
+  .notice {
+    border: 1.5px solid rgba(255,143,208,.35);
+    background: rgba(255,143,208,.05);
+    border-radius: 1.4rem; padding: 1.75rem; max-width: 52rem; margin: 0 auto;
+  }
+  .notice h3 { margin: 0 0 .6rem; color: #fff; font-size: 1.25rem; }
+  .notice p { margin: 0 0 .8rem; color: var(--text-soft); }
+  .notice p:last-child { margin: 0; }
+
+  /* ---------- FAQ ---------- */
+  .faq { max-width: 48rem; margin: 0 auto; }
+  .faq details { border-bottom: 1px solid var(--line); }
+  .faq summary { cursor: pointer; padding: 1.2rem 2rem 1.2rem 0; font-weight: 600; color: #fff; list-style: none; position: relative; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; position: absolute; right: .25rem; top: 1rem; font-size: 1.5rem; color: var(--cyan); transition: transform .2s; }
+  .faq details[open] summary::after { transform: rotate(45deg); }
+  .faq details p { margin: 0 0 1.25rem; color: var(--text-soft); }
+
+  /* ---------- Contact ---------- */
+  .contact-card {
+    max-width: 40rem; margin: 0 auto;
+    background: var(--card); border: 1.5px solid var(--card-border); border-radius: 1.8rem; padding: 2rem 1.75rem;
+  }
+  form { display: grid; gap: 1.1rem; }
+  label { display: block; font-weight: 600; font-size: .92rem; margin-bottom: .4rem; color: #fff; }
+  input, select, textarea {
+    width: 100%; font: inherit; color: #fff;
+    background: #11112a; border: 1.5px solid var(--line); border-radius: .9rem; padding: .85rem 1rem;
+  }
+  input:hover, select:hover, textarea:hover { border-color: var(--card-border); }
+  textarea { min-height: 8.5rem; resize: vertical; }
+  .status { min-height: 1.4rem; margin: 0; font-weight: 600; color: var(--green); }
+  .note { font-size: .86rem; color: var(--text-soft); margin: 0; }
+
+  footer { border-top: 1px solid var(--line); padding: 2.25rem 0 5.5rem; color: var(--text-soft); font-size: .9rem; text-align: center; }
+  footer p { margin: .3rem 0; }
+
+  /* ---------- Floating chat ---------- */
+  .chat {
+    position: fixed; right: 1.1rem; bottom: 1.1rem; z-index: 30;
+    display: flex; align-items: center; gap: .55rem;
+    padding: .85rem 1.2rem; border-radius: 999px; text-decoration: none;
+    background: linear-gradient(90deg, var(--cyan), var(--pink)); color: #0d0b26; font-weight: 700; font-size: .95rem;
+    box-shadow: 0 8px 28px rgba(0,0,0,.45), 0 0 22px rgba(94,240,255,.35);
+  }
+  .chat svg { width: 1.2rem; height: 1.2rem; stroke: #0d0b26; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .hero h1 { animation: none; }
+    * { transition: none !important; }
+  }
+
+  /* ---------- Contact modal ---------- */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 50;
+    background: rgba(2,4,8,.72);
+    backdrop-filter: blur(4px);
+    align-items: center; justify-content: center;
+    padding: 1.25rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    position: relative;
+    width: min(26rem, 100%);
+    background: var(--card);
+    border: 1.5px solid var(--card-border);
+    border-radius: 1.6rem;
+    padding: 2rem 1.75rem 1.75rem;
+    box-shadow: 0 24px 60px rgba(0,0,0,.55), 0 0 30px rgba(31,224,138,.12);
+    animation: pop .18s ease-out;
+  }
+  @keyframes pop { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: none; } }
+  .modal-close {
+    position: absolute; top: 1rem; right: 1rem;
+    width: 2.2rem; height: 2.2rem; border-radius: 50%;
+    border: 1.5px solid var(--card-border); background: transparent;
+    color: var(--cyan); font-size: 1.1rem; line-height: 1; cursor: pointer;
+    display: grid; place-items: center;
+  }
+  .modal-close:hover { background: rgba(63,169,255,.1); }
+  .modal h3 { margin: 0 0 .4rem; font-size: 1.4rem; color: #fff; padding-right: 2rem; }
+  .modal > p { margin: 0 0 1.5rem; color: var(--text-soft); font-size: .95rem; }
+  .modal-links { display: grid; gap: .8rem; margin: 0; padding: 0; list-style: none; }
+  .modal-links a {
+    display: flex; align-items: center; gap: .75rem;
+    padding: .9rem 1.1rem; border-radius: .9rem; text-decoration: none;
+    font-weight: 700; font-size: .98rem; color: #04070a;
+    transition: transform .15s, box-shadow .2s;
+  }
+  .modal-links a:hover { transform: translateY(-1px); }
+  .modal-links svg { width: 1.3rem; height: 1.3rem; flex-shrink: 0; }
+  .ml-telegram { background: linear-gradient(90deg, #3fa9ff, #2e86ff); }
+  .ml-email { background: linear-gradient(90deg, #3fa9ff, #1fe08a); }
+  .ml-whatsapp { background: #1fe08a; }
+  .ml-whatsapp2 { background: #16c77a; }
+  .modal-note { margin: 1.4rem 0 0; font-size: .82rem; color: var(--text-soft); text-align: center; }
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="bar">
+      <!-- EDIT: your brand name -->
+      <a class="logo" href="#top" aria-label="Wangcyberpunk home">
+        <span class="logo-mark" aria-hidden="true">W</span>
+        <span class="logo-text">Wang<span>cyberpunk</span></span>
+      </a>
+
+      <button class="menu-btn" id="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+        <i></i><i></i><i></i>
+      </button>
+    </div>
+
+    <nav class="main" id="menu" aria-label="Main">
+      <a href="#top">Home</a>
+
+      <div class="dd">
+        <button class="dd-btn" id="dd-btn" aria-expanded="false" aria-controls="dd-list" aria-haspopup="true">
+          Services <span class="caret" aria-hidden="true"></span>
+        </button>
+        <ul class="dd-list" id="dd-list">
+          <li><a href="#svc-accounts">Account Protection and Recovery</a></li>
+          <li><a href="#svc-incident">Incident Response</a></li>
+          <li><a href="#svc-blockchain">Blockchain Fraud Tracing</a></li>
+          <li><a href="#svc-audits">Security Audits</a></li>
+          <li><a href="#svc-family">Family Device Safety</a></li>
+          <li><a href="#svc-training">Security Training</a></li>
+        </ul>
+      </div>
+
+      <a href="#about">About</a>
+      <a href="#testimonials">Testimonial</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ===== Hero ===== -->
+  <div class="wrap hero">
+    <h1 class="grad">Your Trusted Cybersecurity &amp; Digital Safety Experts</h1>
+    <p>
+      We are a professional, discreet team specializing in account protection,
+      incident response, and fraud investigation. With over a decade of experience
+      in cybersecurity and blockchain forensics, we help you regain control of your
+      own accounts, secure your devices, and document what happened when something
+      goes wrong.
+    </p>
+    <div class="btns">
+      <a class="btn btn-fill" href="#contact">Request a consultation</a>
+      <a class="btn btn-line" href="#services">See our services</a>
+    </div>
+    <ul class="trust">
+      <li>Confidential by default</li>
+      <li>Written scope and pricing</li>
+      <li>Work only on what you own</li>
+    </ul>
+  </div>
+
+  <!-- ===== Services ===== -->
+  <section id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="grad">What We Do</h2>
+        <p>Practical security help for individuals, families, and small businesses.</p>
+      </div>
+
+      <div class="cards">
+        <article class="card" id="svc-accounts">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+          </div>
+          <h3>Account Protection and Recovery</h3>
+          <p>Locked out or hacked? We guide you through official recovery channels, remove attackers' access, and set up two-factor authentication so it stays secure.</p>
+        </article>
+
+        <article class="card" id="svc-incident">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+          <h3>Incident Response</h3>
+          <p>If you suspect a breach, we find out what was accessed, contain the damage, and give you a clear written report of what happened and what to fix.</p>
+        </article>
+
+        <article class="card" id="svc-blockchain">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6M11 8v6"/></svg>
+          </div>
+          <h3>Blockchain Fraud Tracing</h3>
+          <p>We trace stolen or scammed crypto across the blockchain and prepare evidence packs for exchanges and law enforcement. We never guarantee recovery.</p>
+        </article>
+
+        <article class="card" id="svc-audits">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+          </div>
+          <h3>Security Audits</h3>
+          <p>Authorized testing of your website, network, or devices. You get a prioritized list of weaknesses and step-by-step fixes.</p>
+        </article>
+
+        <article class="card" id="svc-family">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M17 14c2.5 0 4 1.8 4 4"/></svg>
+          </div>
+          <h3>Family Device Safety</h3>
+          <p>Set up parental controls, safe browsing, and location sharing that everyone in the household knows about and agrees to.</p>
+        </article>
+
+        <article class="card" id="svc-training">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/><circle cx="19" cy="18" r="2"/></svg>
+          </div>
+          <h3>Security Training</h3>
+          <p>Short, practical sessions that teach your team to spot phishing, use password managers, and respond calmly to suspicious activity.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Process ===== -->
+  <section id="process">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="grad">How It Works</h2>
+        <p>Every engagement follows the same four steps.</p>
+      </div>
+      <ol class="steps">
+        <li><h3>Tell us what happened</h3><p>Share the situation using the form below. It is confidential.</p></li>
+        <li><h3>Agree on scope and price</h3><p>You receive a written plan with what we will do, how long it takes, and the fixed cost.</p></li>
+        <li><h3>We investigate and fix</h3><p>We work only on accounts and systems you own or are authorized to manage.</p></li>
+        <li><h3>You get a clear report</h3><p>A plain-language summary of findings and the steps to stay protected.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===== About ===== -->
+  <section id="about">
+    <div class="wrap">
+      <div class="section-head"><h2 class="grad">About Wangcyberpunk</h2></div>
+      <div class="about">
+        <div>
+          <p><strong>Wangcyberpunk is a small team of security specialists</strong> who help people and businesses protect their digital lives. We started by helping friends and family secure hacked accounts, and now support clients with investigations, audits, and training.</p>
+          <p>We keep things simple: a clear written scope, a fixed price, and plain-language reports. No jargon, no pressure, and no surprises.</p>
+          <ul class="stats">
+            <li><b>10+</b>years in cybersecurity</li>
+            <li><b>500+</b>cases handled</li>
+            <li><b>24h</b>typical response time</li>
+            <li><b>100%</b>confidential</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Testimonials (EDIT: replace these samples with real client feedback and permission to publish) ===== -->
+  <section id="testimonials">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="grad">Testimonials</h2>
+        <p>What clients say about working with us.</p>
+      </div>
+      <div class="quotes">
+        <figure class="quote">
+          <p>My business email was taken over on a Friday night. They walked me through locking it down and had everything secured by Saturday morning.</p>
+          <footer><b>Sample Client One</b>Restaurant owner</footer>
+        </figure>
+        <figure class="quote">
+          <p>The audit report was clear enough for my whole team to follow. We fixed the top issues in a week.</p>
+          <footer><b>Sample Client Two</b>Operations manager</footer>
+        </figure>
+        <figure class="quote">
+          <p>They were honest from the start that recovering my funds was unlikely, but the evidence they prepared made my police report much stronger.</p>
+          <footer><b>Sample Client Three</b>Freelance designer</footer>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="section-head"><h2 class="grad">Common Questions</h2></div>
+      <div class="faq">
+        <details>
+          <summary>How much does it cost?</summary>
+          <p>The first consultation has no obligation. After that you receive a fixed quote in writing before any work starts.</p>
+        </details>
+        <details>
+          <summary>Is my information kept private?</summary>
+          <p>Yes. We only collect what we need, keep it encrypted, and never share it without your permission unless the law requires it.</p>
+        </details>
+        <details>
+          <summary>Can you get my stolen crypto back?</summary>
+          <p>We can trace where it went and prepare evidence for exchanges and police. Recovery is never guaranteed, and we will tell you honestly what is realistic.</p>
+        </details>
+        <details>
+          <summary>How fast can you start?</summary>
+          <p>For urgent incidents such as an active account takeover, we aim to respond the same business day.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Contact ===== -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="grad">Get Help</h2>
+        <p>Tell us what is going on. We reply within one business day.</p>
+      </div>
+
+      <div class="contact-card">
+        <form id="contact-form" novalidate>
+          <div>
+            <label for="name">Your name</label>
+            <input id="name" name="name" type="text" autocomplete="name" required>
+          </div>
+          <div>
+            <label for="email">Your email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div>
+            <label for="topic">What do you need help with?</label>
+            <select id="topic" name="topic">
+              <option>Hacked or locked account</option>
+              <option>Suspected breach</option>
+              <option>Crypto scam or theft</option>
+              <option>Security audit</option>
+              <option>Family device safety</option>
+              <option>Something else</option>
+            </select>
+          </div>
+          <div>
+            <label for="message">Describe the situation</label>
+            <textarea id="message" name="message" required></textarea>
+          </div>
+          <button class="btn btn-fill" type="submit">Send request</button>
+          <p class="status" id="status" role="status" aria-live="polite"></p>
+          <p class="note">Sending opens your email app with the message ready to go. Please do not include passwords or recovery codes.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>&copy; <span id="year">2026</span> Wangcyberpunk. All rights reserved.</p>
+    <p>support@wangcyberpunk.example</p>
+  </div>
+</footer>
+
+<button class="chat" type="button" id="open-contact-modal" aria-haspopup="dialog" aria-controls="contact-modal">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>
+  Chat with us
+</button>
+
+<!-- ===== Contact modal ===== -->
+<div class="modal-overlay" id="contact-modal-overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title" id="contact-modal">
+    <button class="modal-close" id="close-contact-modal" aria-label="Close">&times;</button>
+    <h3 id="contact-modal-title">Get in touch</h3>
+    <p>Reach us directly on any of these channels.</p>
+    <ul class="modal-links">
+      <li>
+        <a class="ml-email" href="mailto:Alberthook2851@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          Email Support
+        </a>
+      </li>
+      <li>
+        <a class="ml-whatsapp" href="https://wa.me/13212216168" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm5.8 14.2c-.2.6-1.4 1.2-1.9 1.3-.5.1-1.1.1-1.8-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.8-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5.2.5.7 1.8.8 1.9.1.1.1.3 0 .5-.1.2-.1.3-.3.5l-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1l1.7.8c.2.1.4.2.4.3.1.2.1.8-.1 1.3z"/></svg>
+          Chat on WhatsApp
+        </a>
+      </li>
+      <li>
+        <a class="ml-whatsapp2" href="https://wa.me/12175202064" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm5.8 14.2c-.2.6-1.4 1.2-1.9 1.3-.5.1-1.1.1-1.8-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.8-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5.2.5.7 1.8.8 1.9.1.1.1.3 0 .5-.1.2-.1.3-.3.5l-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1l1.7.8c.2.1.4.2.4.3.1.2.1.8-.1 1.3z"/></svg>
+          Chat on WhatsApp (alternative)
+        </a>
+      </li>
+      <li>
+        <a class="ml-telegram" href="https://t.me/Wangcyberpunk" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.9 4.1c-.3-.2-.7-.3-1.1-.1L2.6 11.4c-.6.2-.6.6-.5.9.1.3.3.5.7.6l4.6 1.4 1.8 5.4c.1.4.4.6.7.6.2 0 .4-.1.6-.3l2.5-2.4 4.7 3.4c.2.1.4.2.6.2.1 0 .3 0 .4-.1.3-.1.5-.4.6-.7l3-16.1c0-.4-.1-.8-.4-1.1zM9.9 14.3l-1.2 3.5-.9-2.8 8.9-6.6-6.8 5.9z"/></svg>
+          Message on Telegram
+        </a>
+      </li>
+    </ul>
+    <p class="modal-note">Response within a few hours • Support available</p>
+  </div>
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Mobile menu
+  const btn = document.getElementById('menu-btn');
+  const menu = document.getElementById('menu');
+  btn.addEventListener('click', () => {
+    const open = menu.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open);
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    menu.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-label', 'Open menu');
+  }));
+
+
+  // Services dropdown
+  const ddBtn = document.getElementById('dd-btn');
+  const ddList = document.getElementById('dd-list');
+  function setDD(open) {
+    ddList.classList.toggle('open', open);
+    ddBtn.setAttribute('aria-expanded', open);
+  }
+  ddBtn.addEventListener('click', e => { e.stopPropagation(); setDD(!ddList.classList.contains('open')); });
+  ddList.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    setDD(false);
+    menu.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+  }));
+  document.addEventListener('click', e => { if (!e.target.closest('.dd')) setDD(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { setDD(false); ddBtn.focus(); } });
+
+  // Contact modal
+  const overlay = document.getElementById('contact-modal-overlay');
+  const openBtn = document.getElementById('open-contact-modal');
+  const closeBtn = document.getElementById('close-contact-modal');
+
+  function openModal() {
+    overlay.classList.add('open');
+    closeBtn.focus();
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    openBtn.focus();
+  }
+  openBtn.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal(); });
+
+  // Contact form opens the visitor's email app
+  const TO = 'support@wangcyberpunk.example'; // EDIT: your email
+  const form = document.getElementById('contact-form');
+  const status = document.getElementById('status');
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
+
+    if (!name || !message) { status.style.color = '#ff8fd0'; status.textContent = 'Please add your name and a short description.'; return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { status.style.color = '#ff8fd0'; status.textContent = 'Please enter a valid email address.'; return; }
+
+    const subject = encodeURIComponent(form.topic.value + ' - ' + name);
+    const body = encodeURIComponent(message + '\n\nFrom: ' + name + ' (' + email + ')');
+    status.style.color = '#19e68c';
+    status.textContent = 'Opening your email app…';
+    window.location.href = 'mailto:' + TO + '?subject=' + subject + '&body=' + body;
+  });
+</script>
+</body>
+</html>
