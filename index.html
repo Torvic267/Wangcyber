@@ -69,13 +69,17 @@
     padding: 2px;
   }
   .logo-text { font-weight: 700; font-size: 1.15rem; letter-spacing: .01em; }
-  .logo-text span { color: var(--cyan); }
+  .logo-text span {
+  background: linear-gradient(90deg, var(--cyan), var(--pink));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+  }
 
   .menu-btn {
     width: 2.8rem; height: 2.8rem; background: transparent; border: 0; cursor: pointer;
     display: grid; place-content: center; gap: 6px;
   }
-  .menu-btn i { display: block; width: 1.9rem; height: 3px; background: var(--cyan); border-radius: 2px; transition: transform .2s, opacity .2s; }
+  .menu-btn i { display: block; width: 1.9rem; height: 3px; background: linear-gradient(90deg, var(--cyan), var(--pink)); border-radius: 2px; transition: transform .2s, opacity .2s; }
   .menu-btn[aria-expanded="true"] i:nth-child(1) { transform: translateY(9px) rotate(45deg); }
   .menu-btn[aria-expanded="true"] i:nth-child(2) { opacity: 0; }
   .menu-btn[aria-expanded="true"] i:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
