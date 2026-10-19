@@ -802,6 +802,178 @@
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+  
+  // ---------- Shared: size the top background zone (header + hero only) ----------
+  function sizeBgZone() {
+    const zone = document.getElementById('bg-zone');
+    const boundary = document.getElementById('services'); // "What We Do" — the bottom edge of the effect
+    if (!zone || !boundary) return;
+    const rect = boundary.getBoundingClientRect();
+    const zoneHeight = Math.max(rect.top + window.scrollY, 1);
+    zone.style.height = zoneHeight + 'px';
+  }
+  sizeBgZone();
+  window.addEventListener('resize', sizeBgZone);
+  window.addEventListener('load', sizeBgZone);
+
+  // ---------- Falling binary digits (encryption feel) ----------
+  (function () {
+    const canvas = document.getElementById('bg-binary');
+    if (!canvas) return;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+
+    const ctx = canvas.getContext('2d');
+    let w, h, dpr, cols, lastTick;
+    const FONT_SIZE = 15;
+    const COLOR = '63,169,255';
+    const MARGIN_RATIO = 0.16; // fraction of width used by each side strip
+    const SPEED = 0.6; // rows per frame-tick, slower than a typical matrix rain
+
+    function sizeCanvas() {
+      sizeBgZone();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = window.innerWidth;
+      h = document.getElementById('bg-zone').clientHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const stripWidth = Math.max(w * MARGIN_RATIO, FONT_SIZE * 3);
+      const perStrip = Math.max(1, Math.floor(stripWidth / FONT_SIZE));
+
+      cols = [];
+      for (let i = 0; i < perStrip; i++) {
+        cols.push({ x: i * FONT_SIZE, y: Math.random() * -h / FONT_SIZE });
+      }
+      for (let i = 0; i < perStrip; i++) {
+        cols.push({ x: w - stripWidth + i * FONT_SIZE, y: Math.random() * -h / FONT_SIZE });
+      }
+    }
+
+    function step(now) {
+      if (!lastTick) lastTick = now;
+      const elapsed = now - lastTick;
+      if (elapsed < 80) { // throttle to a calmer pace
+        requestAnimationFrame(step);
+        return;
+      }
+      lastTick = now;
+
+      ctx.fillStyle = 'rgba(4,7,10,0.14)';
+      ctx.fillRect(0, 0, w, h);
+      ctx.font = FONT_SIZE + 'px monospace';
+
+      for (const c of cols) {
+        const char = Math.random() > 0.5 ? '1' : '0';
+        const y = c.y * FONT_SIZE;
+        const alpha = Math.random() * 0.22 + 0.08;
+        ctx.fillStyle = `rgba(${COLOR},${alpha})`;
+        ctx.fillText(char, c.x, y);
+
+        if (y > h && Math.random() > 0.98) c.y = 0;
+        c.y += SPEED;
+      }
+      requestAnimationFrame(step);
+    }
+
+    sizeCanvas();
+    requestAnimationFrame(step);
+
+    let resizeTimer2;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer2);
+      resizeTimer2 = setTimeout(sizeCanvas, 200);
+    });
+  })();
+
+  // ---------- Moving dot background ----------
+  (function () {
+    const canvas = document.getElementById('bg-particles');
+    if (!canvas) return;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+
+    const ctx = canvas.getContext('2d');
+    let w, h, dots, dpr;
+    const COLORS = ['63,169,255', '31,224,138']; // blue, green (matches --cyan / --pink)
+    const LINK_DIST = 150;
+
+    function sizeCanvas() {
+      sizeBgZone();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = window.innerWidth;
+      h = document.getElementById('bg-zone').clientHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function makeDots() {
+      const count = Math.round((w * h) / 6500); // much denser field
+      dots = Array.from({ length: Math.min(count, 320) }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 2.1 + 0.9,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)]
+      }));
+    }
+
+    function step() {
+      ctx.clearRect(0, 0, w, h);
+
+      // move + draw dots
+      for (const d of dots) {
+        d.x += d.vx;
+        d.y += d.vy;
+        if (d.x < 0 || d.x > w) d.vx *= -1;
+        if (d.y < 0 || d.y > h) d.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${d.color},0.75)`;
+        ctx.shadowColor = `rgba(${d.color},0.9)`;
+        ctx.shadowBlur = 4;
+        ctx.fill();
+      }
+      ctx.shadowBlur = 0;
+
+      // connecting lines between nearby dots
+      for (let i = 0; i < dots.length; i++) {
+        for (let j = i + 1; j < dots.length; j++) {
+          const a = dots[i], b = dots[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < LINK_DIST) {
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = `rgba(63,169,255,${0.14 * (1 - dist / LINK_DIST)})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    sizeCanvas();
+    makeDots();
+    requestAnimationFrame(step);
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => { sizeCanvas(); makeDots(); }, 200);
+    });
+  })();
 
   // ---------- Language translations ----------
   const translations = {
